@@ -2,16 +2,16 @@
 displayName: "Project Frost in a Jar"
 
 #the internal name of your mod
-name: "pf-java"
+name: "project-frost"
 
 #your name
 author: "Cry0flu1d & 2356"
 
 #the fully qualified main class of the mod
-main: "main.ProjectFrost"
+main: "projectfrost.ProjectFrost"
 
 #the mod description as seen in the mod dialog
-description: "A Mindustry Java mod that add a new system"
+description: "A Mindustry Java mod that add a some contents."
 
 #the mod version
 version: 0.0
