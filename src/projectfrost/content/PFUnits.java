@@ -1,15 +1,14 @@
 package projectfrost.content;
 
-import arc.*;
-import arc.util.*;
-import mindustry.*;
-import mindustry.content.*;
-import mindustry.entities.*;
-import mindustry.entities.Bullet.*;
-import mindustry.entities.abilities.*;
+import mindustry.type.UnitType;
 
-public class PFUnits implements ContentList {
+public class PFUnits {
     public static
     UnitType
         subzero,sharder;
+
+    public static void load() {
+        // TODO Auto-generated method stub
+        
+    }
 }

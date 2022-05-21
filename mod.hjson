@@ -5,19 +5,19 @@ displayName: "Project Frost in a Jar"
 name: "project-frost"
 
 #your name
-author: "Cry0flu1d & 2356"
+author: "[#6ecdecff]Cry0flu1d [white]& [sky]2356"
 
 #the fully qualified main class of the mod
 main: "projectfrost.ProjectFrost"
 
 #the mod description as seen in the mod dialog
-description: "A Mindustry Java mod that add a some contents."
+description: "A Mindustry Java mod that add a some contents.\n\n[yellow]Special credits to Carrot for offering some sprites."
 
 #the mod version
 version: 0.0
 
 #the minimum game build required to run this mod
-minGameVersion: 135
+minGameVersion: 136
 
 #this is a java mod
 java: true
