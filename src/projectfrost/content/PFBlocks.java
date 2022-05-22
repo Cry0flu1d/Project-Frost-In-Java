@@ -6,9 +6,12 @@ import mindustry.type.Category;
 import mindustry.type.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 
 import static mindustry.type.ItemStack.*;
+
+import arc.graphics.Color;
 
 
 
@@ -77,7 +80,7 @@ public class PFBlocks {
         }};
         //TODO a large factory
         //endregion production
-        //region distributions
+        //region distribution
             plastRouter = new StackRouter("plast-router"){{
             requirements(Category.distribution, with(Items.plastanium, 5, Items.silicon, 2, Items.graphite, 2));
             health = 130;
@@ -98,6 +101,17 @@ public class PFBlocks {
             speed = 3f / 60f;
             itemCapacity = 8;
         }};
+        //endregion distribution
+        //region power
+        cryoTransmitter = new PowerNode("cryo-transmitter,"){{
+            requirements(Category.power, with(Items.titanium, 2, Items.silicon, 2, PFItems.frostite,1));
+            health = 100;
+            maxNodes = 6;
+            laserRange = 9.5f;
+            laserColor1 = Color.valueOf("6FE7F7");
+            laserColor2 = Color.valueOf("9EF4FF");
+        }};
+
 
     
 }
