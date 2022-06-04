@@ -1,15 +1,22 @@
 package projectfrost.content;
 
-import arc.graphics.Color;
+
+import arc.graphics.*;
 import mindustry.world.Block;
 import mindustry.content.*;
+import mindustry.entities.bullet.LaserBulletType;
 import mindustry.entities.effect.*;
+import mindustry.gen.Sounds;
+import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.world.blocks.defense.*;
+import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.logic.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.draw.*;
+import mindustry.world.meta.Env;
 
 import static mindustry.type.ItemStack.*;
 
@@ -24,7 +31,7 @@ public class PFBlocks {
         //wall
         frostiteWall , largeFrostiteWall,
         //turret
-
+        autocannon,farlight,
         //factory
         waterCrystalizer,
         //distribution
@@ -38,6 +45,7 @@ public class PFBlocks {
         //effect
 
         //logic
+        heatproofProccessor,
 
         //enviroment
 
@@ -64,6 +72,51 @@ public class PFBlocks {
 
         }};
         //endregion walls
+        //region turrets
+        farlight = new PowerTurret("farlight"){{
+            requirements(Category.turret, with(Items.copper, 1200, Items.titanium, 800, Items.plastanium, 300, Items.silicon, 500, Items.surgeAlloy, 200));
+            shootType = new LaserBulletType(){{
+                length = 400f;
+                damage = 500f;
+                width = 42f;
+
+                lifetime = 60f;
+
+                lightningSpacing = 80f;
+                lightningLength = 6;
+                lightningDelay = 1.5f;
+                lightningLengthRand = 12;
+                lightningDamage = 80;
+                lightningAngleRand = 05f;
+                largeHit = true;
+                lightColor = lightningColor = Pal.lancerLaser.cpy().a(0.4f);
+                colors = new Color[]{Pal.lancerLaser.cpy().a(0.4f), Pal.lancerLaser, Color.white};
+
+                chargeEffect = PFEffects.farlightShot;
+                collidesTeam = true;
+
+                sideAngle = 15f;
+                sideWidth = 0f;
+                sideLength = 0f;
+            }};
+            size = 4;
+            reload = 460f;
+            shootCone = 2f;
+            rotateSpeed = 2.5f;
+            targetAir = true;
+            range = 384f;
+            shootEffect = new MultiEffect(
+                Fx.lightningShoot,
+                Fx.shootBigSmoke2);
+            heatColor = Color.cyan;
+            recoil = 6f;
+            health = 1880;
+            shootSound = Sounds.laserbig;
+            consumePower(800f / 60f);
+            coolant = consumeCoolant(0.8f);
+            coolantMultiplier = 0.6f;
+        }};
+        //endregion turrets
         //region production
         waterCrystalizer = new GenericCrafter("water-crystalizer"){{
             size = 2;
@@ -88,7 +141,7 @@ public class PFBlocks {
             plastRouter = new StackRouter("plast-router"){{
             requirements(Category.distribution, with(Items.plastanium, 5, Items.silicon, 2, Items.graphite, 2));
             health = 130;
-            speed = 4f / 60f;;
+            speed = 4f / 60f;
             baseEfficiency = 1f;
             underBullets = true;
             solid = false;
@@ -169,10 +222,24 @@ public class PFBlocks {
                 colorTo = Color.valueOf("9EF4FFFF");
             }};
             updateEffectChance = 0.15f;
+            //endregion production
+            //region logic
 
 
         }};
-        
+        heatproofProccessor = new LogicBlock("heatproof-proccessor"){{
+            requirements(Category.logic, with(Items.beryllium, 300, Items.silicon, 300, Items.tungsten, 250, Items.oxide, 100));
+            
+            consumeLiquid(Liquids.nitrogen, 6f / 60f);
+            hasLiquids = true;
+
+            instructionsPerTick = 3;
+            range = 6 * 18;
+            size = 2;
+            health = 1200;
+            armor = 4f;
+            envEnabled = Env.scorching;
+        }};
 
 
 
