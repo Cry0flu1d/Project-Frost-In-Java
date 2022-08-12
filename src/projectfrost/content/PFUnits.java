@@ -10,14 +10,15 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
-import projectfrost.ProjectFrost;
+
+import static projectfrost.ProjectFrost.name;
 
 public class PFUnits {
     public static  UnitType sharder,subzero,cargoFlare;
     static{
-        EntityMapping.nameMap.put(ProjectFrost.name("sharder"), EntityMapping.idMap[4]);
-        EntityMapping.nameMap.put(ProjectFrost.name("subzero"), EntityMapping.idMap[5]);
-        EntityMapping.nameMap.put(ProjectFrost.name("cargoFlare"), EntityMapping.idMap[3]);
+        EntityMapping.nameMap.put(name("sharder"), EntityMapping.idMap[4]);
+        EntityMapping.nameMap.put(name("subzero"), EntityMapping.idMap[5]);
+        EntityMapping.nameMap.put(name("cargoFlare"), EntityMapping.idMap[3]);
     }
 
 
