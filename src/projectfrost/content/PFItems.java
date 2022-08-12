@@ -5,13 +5,16 @@ import mindustry.type.Item;
 
 public class PFItems  {
     public static Item
-        frostite;
-        //TODO frostanium,
+        frostite, cryoriteAlloy;
+
 
     public static void load() {
         frostite = new Item("frostite", Color.valueOf("9EF4FF")) {{
 			hardness = 2;
         }};
+        /*cryoriteAlloy = new Item("cryorite-alloy", Color.valueOf("9EF4FF")) {{
+			
+        }};*/
     }
     
 }

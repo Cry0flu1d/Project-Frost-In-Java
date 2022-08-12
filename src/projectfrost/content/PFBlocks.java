@@ -2,21 +2,31 @@ package projectfrost.content;
 
 
 import arc.graphics.*;
+//import arc.struct.Seq;
 import mindustry.world.Block;
 import mindustry.content.*;
-import mindustry.entities.bullet.LaserBulletType;
+import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
+import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.environment.*;
+import mindustry.world.blocks.heat.*;
 import mindustry.world.blocks.logic.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.units.UnitCargoLoader;
+import mindustry.world.blocks.units.UnitCargoUnloadPoint;
 import mindustry.world.draw.*;
+import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Env;
+//import multicraft.*;
+
 
 import static mindustry.type.ItemStack.*;
 
@@ -31,11 +41,14 @@ public class PFBlocks {
         //wall
         frostiteWall , largeFrostiteWall,
         //turret
-        autocannon,farlight,
+        autocannon,farlight,ionization,
         //factory
-        waterCrystalizer,
+        waterCrystalizer,frostSynthesizer,
+
+        largeElectricHeater, heatConduit,
         //distribution
         frostiteConveyor,frostiteStackConveyor,plastRouter,
+        flareLoadingPad,flareUnloadingPoint,
         //power
         cryoTransmitter,
         meltingGenerator,
@@ -43,14 +56,17 @@ public class PFBlocks {
         //production
         icyDrill,
         //effect
-
+        coreFrost,
         //logic
         heatproofProccessor,
 
         //enviroment
-
+        blueIce,blueIceWall,blueIceBoulder,blueIcePanel,
+        //ores
+        iceShard,
         //superweapons
         Solarfall,Frostnova,Astigmatism;
+
     public static void load(){
         //region walls
         frostiteWall = new Wall("frostite-wall"){{
@@ -93,11 +109,13 @@ public class PFBlocks {
                 colors = new Color[]{Pal.lancerLaser.cpy().a(0.4f), Pal.lancerLaser, Color.white};
 
                 chargeEffect = PFEffects.farlightShot;
+                hitEffect = Fx.hitLancer;
                 collidesTeam = true;
 
                 sideAngle = 15f;
                 sideWidth = 0f;
                 sideLength = 0f;
+                buildingDamageMultiplier = 0.15f;
             }};
             size = 4;
             reload = 460f;
@@ -112,9 +130,79 @@ public class PFBlocks {
             recoil = 6f;
             health = 1880;
             shootSound = Sounds.laserbig;
+            chargeSound = Sounds.lasercharge;
             consumePower(800f / 60f);
             coolant = consumeCoolant(0.8f);
             coolantMultiplier = 0.6f;
+        }};
+        ionization = new PowerTurret("ionization"){{
+            requirements(Category.turret, with(Items.copper, 80, Items.titanium, 40, Items.silicon, 100, Items.graphite, 50));
+            range = 225f;
+
+            shoot.firstShotDelay = 20f;
+
+            recoil = 1.8f;
+            reload = 60f;
+            shake = 1.4f;
+            shootEffect = Fx.lancerLaserShoot;
+            smokeEffect = Fx.none;
+            heatColor = Color.red;
+            size = 2;
+            scaledHealth = 240;
+            consumePower(280f / 60f);
+            targetAir = true;
+            moveWhileCharging = false;
+            shootSound = Sounds.spark;
+            shootType = new BasicBulletType(){{
+                shoot = new ShootHelix(){{
+                    mag = 0.8f;
+                    scl = 6f;
+                }};
+                sprite = "large-orb";
+                hittable = false;
+                trailEffect = Fx.missileTrail;
+                trailInterval = 2.5f;
+                trailParam = 2.2f;
+                speed = 4f;
+                damage = 64f;
+                lifetime = 90f;
+                width = height = 12f;
+                backColor = Color.white;
+                frontColor = Pal.lancerLaser;
+                shrinkX = shrinkY = 0f;
+                trailColor = Color.valueOf("BFD9FF");
+                trailLength = 12;
+                trailWidth = 2.2f;
+                despawnEffect = Fx.none;
+                hitEffect = Fx.hitLancer;
+                intervalBullet = new LightningBulletType(){{
+                    damage = 12;
+                    ammoMultiplier = 1f;
+                    lightningColor = Pal.lancerLaser;
+                    lightningLength = 2;
+                    lightningLengthRand = 5;
+                    buildingDamageMultiplier = 0.15f;
+                    lightningType = new BulletType(0.0001f, 0f){{
+                        lifetime = Fx.lightning.lifetime;
+                        hitEffect = Fx.hitLancer;
+                        despawnEffect = Fx.none;
+                        status = StatusEffects.shocked;
+                        statusDuration = 20f;
+                        hittable = false;
+                        lightColor = Color.cyan;
+                        buildingDamageMultiplier = 0.15f;
+                    }};
+                }};
+
+                bulletInterval = 3f;
+
+                lightningColor = Pal.lancerLaser;
+                lightningDamage = 16;
+                lightning = 6;
+                lightningLength = 3;
+                lightningLengthRand = 6;
+            }};
+        coolant = consumeCoolant(0.2f);
         }};
         //endregion turrets
         //region production
@@ -135,7 +223,48 @@ public class PFBlocks {
             requirements(Category.crafting, with(Items.lead,50 ,Items.silicon,30 ,Items.titanium,50));
 
         }};
-        //TODO a large factory
+        
+            //TODO data adjustments
+        /*frostSynthesizer = new GenericCrafter("frost-synthesizer"){{
+                size = 3;
+                health = 600;
+                hasPower = hasItems = hasLiquids = true;
+                craftTime = 60f;
+                itemCapacity = 20;
+               craftEffect = Fx.pulverizeMedium;
+               updateEffect = Fx.smeltsmoke;
+               updateEffectChance = 0.07f;
+
+                consumePower(4f);
+                consumeItem(Items.metaglass, 3);
+                consumeLiquid(Liquids.water, 1.2f);
+                outputItem = new ItemStack(PFItems.frostite, 5);
+                requirements(Category.crafting, with(Items.lead,50 ,Items.silicon,30 ,Items.titanium,50));
+
+        }};*/
+        largeElectricHeater = new HeatProducer("large-electric-heater"){{
+            requirements(Category.crafting, with(Items.graphite, 300, Items.tungsten, 200, Items.silicon, 200, Items.oxide, 250, Items.carbide, 80));
+
+            researchCostMultiplier = 2f;
+
+            drawer = new DrawMulti(new DrawDefault(), new DrawHeatOutput());
+            scaledHealth = 80;
+            rotateDraw = false;
+            size = 5;
+            heatOutput = 30f;
+            regionRotated1 = 1;
+            consumePower(475f / 60f);
+        }};
+        heatConduit = new HeatConductor("heat-duct"){{
+            requirements(Category.crafting, with(Items.oxide,1 , Items.tungsten, 2));
+            researchCostMultiplier = 12; 
+            size = 1;
+
+            drawer = new DrawMulti(new DrawDefault(), new DrawHeatOutput(), new DrawHeatInput("-heat"));
+            regionRotated1 = 1;
+        }};
+        /*why im doing vanilla expansion stuff
+            just forget it dude*/
         //endregion production
         //region distribution
             plastRouter = new StackRouter("plast-router"){{
@@ -151,24 +280,47 @@ public class PFBlocks {
                 health = 60;
                 speed = 0.1f;
                 displayedSpeed = 12.5f;
+                underBullets = true;
         }};
         frostiteStackConveyor = new StackConveyor("frostite-stack-conveyor"){{
             requirements(Category.distribution, with(PFItems.frostite, 1, Items.metaglass, 1, Items.silicon, 1));
             health = 60;
             speed = 3.5f / 60f;
             itemCapacity = 8;
+            underBullets = true;
         }};
+        //TODO bad name and extremely imba
+        /*flareLoadingPad = new UnitCargoLoader("flare-loading-pad"){{
+            requirements(Category.distribution, with(Items.lead, 250, Items.silicon, 200, Items.graphite, 150, Items.plastanium, 80));
+            size = 2;
+            unitType = PFUnits.cargoFlare;
+            buildTime = 12f*60f;
+            polyStroke = 1.5f;
+            polyRadius = 5;
+            polySides = 4;
+            consumePower(200f / 60f);
+            consumeItem(Items.silicon, 60);
+            itemCapacity = 180;
+
+        }};
+        flareUnloadingPoint = new UnitCargoUnloadPoint("flare-pnloading-point"){{
+            requirements(Category.distribution, with(Items.silicon, 50, Items.graphite, 80));
+            size = 1;
+            itemCapacity = 60;
+        }};*/
+
         //endregion distribution
         //region power
         cryoTransmitter = new PowerNode("cryo-transmitter"){{
             requirements(Category.power, with(Items.titanium, 2, Items.silicon, 2, PFItems.frostite,1));
             health = 100;
             maxNodes = 6;
-            laserRange = 9.5f;
+            laserRange = 12f;
             laserColor1 = Color.valueOf("6FE7F7");
             laserColor2 = Color.valueOf("9EF4FF");
         }};
         meltingGenerator = new ConsumeGenerator("melting-generator"){{
+            requirements(Category.power, with( Items.lead, 150,Items.titanium, 120, Items.silicon, 100, PFItems.frostite, 100));
             size = 3;
             liquidCapacity = 400f;
             itemDuration = 240f;
@@ -176,7 +328,7 @@ public class PFBlocks {
             consumeLiquid(Liquids.slag, 0.4f);
             hasItems = hasLiquids = true;
             drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
-
+            powerProduction = 16;
         }};
         
         differentialBattery = new Battery("differential-battery"){{
@@ -223,6 +375,17 @@ public class PFBlocks {
             }};
             updateEffectChance = 0.15f;
             //endregion production
+            //region effect
+            coreFrost = new CoreBlock("core-frost"){{
+                requirements(Category.production, with(Items.copper, 3000, Items.lead, 3000 ,Items.titanium, 1800, Items.silicon, 2200, PFItems.frostite, 2000));
+                health = 3200;
+                size = 4;
+                itemCapacity = 6000;
+                unitCapModifier = 16;
+                researchCostMultiplier = 0.2f;
+                unitType = PFUnits.subzero;
+            }};
+            //endregion effect
             //region logic
 
 
@@ -240,9 +403,35 @@ public class PFBlocks {
             armor = 4f;
             envEnabled = Env.scorching;
         }};
+        //endregion logic
+        //region environment
+        blueIce = new Floor("blue-ice"){{
+            dragMultiplier = 0.3f;
+            speedMultiplier = 0.85f;
+            attributes.set(Attribute.water, 0.75f);
+            albedo = 0.8f;
+        }};
+        blueIceWall = new StaticWall("blue-ice-wall"){{
+            blueIce.asFloor().wall = this;
+            albedo = 1.25f;
+        }};
+        blueIceBoulder = new Prop("blue-ice-boulder"){{
+            variants = 2;
+            blueIce.asFloor().decoration = this;
+            albedo = 0.8f;
+        }};
+        blueIcePanel = new Floor("blue-ice-panel"){{
+            variants = 0;
+            dragMultiplier = 0.5f;
+            speedMultiplier = 0.9f;
+            attributes.set(Attribute.water, 0.25f);
+            emitLight = true;
+            lightRadius = 36f;
+            lightColor = Color.cyan.cpy().a(0.22f);
 
-
-
+        }};
+        iceShard = new OreBlock("ice-shard",PFItems.frostite);
+        //endregion environment
     
 }
 
