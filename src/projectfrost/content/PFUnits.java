@@ -4,19 +4,22 @@ import arc.graphics.Color;
 import arc.struct.ObjectSet;
 import mindustry.ai.types.*;
 import mindustry.content.*;
-import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.ParticleEffect;
-import mindustry.entities.effect.WaveEffect;
-import mindustry.gen.Sounds;
+import mindustry.entities.effect.*;
+import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
+import projectfrost.ProjectFrost;
 
 public class PFUnits {
-    public static
-    UnitType
-        subzero,sharder,cargoFlare;
+    public static  UnitType sharder,subzero,cargoFlare;
+    static{
+        EntityMapping.nameMap.put(ProjectFrost.name("sharder"), EntityMapping.idMap[4]);
+        EntityMapping.nameMap.put(ProjectFrost.name("subzero"), EntityMapping.idMap[5]);
+        EntityMapping.nameMap.put(ProjectFrost.name("cargoFlare"), EntityMapping.idMap[3]);
+    }
+
 
     public static void load() {
         subzero = new UnitType("subzero"){{
@@ -56,6 +59,7 @@ public class PFUnits {
             itemCapacity = 60;
 
             weapons.add(new Weapon("subzero-plasma-shotgun"){{
+
                 shootY = 3f;
                 inaccuracy = 15f;
                 reload = 50f;
@@ -103,7 +107,6 @@ public class PFUnits {
                     shootEffect = Fx.none;
 
                 }};
-                
             }});
             weapons.add(new Weapon("subzero-parallax"){{
                 shootY = 3f;
