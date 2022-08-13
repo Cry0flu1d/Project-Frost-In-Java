@@ -48,7 +48,7 @@ public class PFUnits {
             legSplashRange = 0;
             hovering = true;
             armor = 0f;
-            ammoType = new ItemAmmoType(PFItems.frostite);
+            //ammoType = new ItemAmmoType(PFItems.frostite);
 
             shadowElevation = 0.4f;
             groundLayer = 75f;
