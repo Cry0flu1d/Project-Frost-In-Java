@@ -249,10 +249,10 @@ public class PFBlocks {
                 trailEffect = Fx.missileTrail;
                 trailInterval = 2.8f;
                 trailParam = 4f;
-                pierceCap = 4;
+                pierceCap = 6;
                 fragOnHit = false;
-                speed = 6f;
-                damage = 130f;
+                speed = 5.5f;
+                damage = 100f;
                 lifetime = 72f;
                 width = height = 14f;
                 backColor = Pal.lancerLaser;
@@ -269,7 +269,7 @@ public class PFBlocks {
                     waveRad = 30f;
                 }};
 
-                intervalBullet = new BasicBulletType(3f, 28){{
+                intervalBullet = new BasicBulletType(3f, 16){{
                     sprite = "missile";
                     width = 6f;
                     hitSize = 4.5f;
@@ -290,16 +290,16 @@ public class PFBlocks {
                     homingPower = 0.25f;
                 }};
 
-                bulletInterval = 6f;
+                bulletInterval = 8f;
                 intervalRandomSpread = 25f;
                 intervalBullets = 3;
-                intervalAngle = 120f;
-                intervalSpread = 288f;
+                intervalAngle = 100f;
+                intervalSpread = 220f;
 
             }};
 
-            reload = 120f;
-            range = 300f;
+            reload = 140f;
+            range = 310f;
             size = 3;
             shootCone = 10f;
             recoil = 2.2f;
