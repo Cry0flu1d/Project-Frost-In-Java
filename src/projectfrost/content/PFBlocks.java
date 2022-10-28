@@ -222,6 +222,7 @@ public class PFBlocks {
                 keepVelocity = false;
                 hittable = false; 
             }};
+            size = 2;
             recoil = 0f;
             reload = 5f;
             coolantMultiplier = 1.25f;
@@ -249,10 +250,10 @@ public class PFBlocks {
                 trailEffect = Fx.missileTrail;
                 trailInterval = 2.8f;
                 trailParam = 4f;
-                pierceCap = 6;
+                pierceCap = 4;
                 fragOnHit = false;
-                speed = 5.5f;
-                damage = 100f;
+                speed = 6f;
+                damage = 110f;
                 lifetime = 72f;
                 width = height = 14f;
                 backColor = Pal.lancerLaser;
@@ -269,14 +270,14 @@ public class PFBlocks {
                     waveRad = 30f;
                 }};
 
-                intervalBullet = new BasicBulletType(3f, 16){{
+                intervalBullet = new BasicBulletType(3f, 18){{
                     sprite = "missile";
-                    width = 6f;
-                    hitSize = 4.5f;
+                    width = 12f;
+                    hitSize = 5f;
                     height = 12f;
                     pierce = true;
-                    pierceCap = 3;
-                    lifetime = 40f;
+                    pierceCap = 1;
+                    lifetime = 45f;
                     hitColor = backColor = trailColor = Pal.lancerLaser;
                     frontColor = Color.white;
                     trailWidth = 1.8f;
@@ -287,14 +288,14 @@ public class PFBlocks {
                         strokeFrom = 2f;
                         lifetime = 8f;
                     }};
-                    homingPower = 0.25f;
+                    homingPower = 0.2f;
                 }};
 
                 bulletInterval = 8f;
-                intervalRandomSpread = 25f;
-                intervalBullets = 3;
-                intervalAngle = 100f;
-                intervalSpread = 220f;
+                intervalRandomSpread = 24f;
+                intervalBullets = 4;
+                intervalAngle = 60f;
+                intervalSpread = 60f;
 
             }};
 

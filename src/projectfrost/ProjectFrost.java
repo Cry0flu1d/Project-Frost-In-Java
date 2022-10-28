@@ -16,10 +16,11 @@ public class ProjectFrost extends Mod{
     @Override
     public void loadContent(){
         Log.info("Loading ProjectFrost...");
-        PFUnits.load();
-        PFItems.load();
-        PFBlocks.load();
         PFFx.load();
+        PFItems.load();
+        PFUnits.load();
+        PFBlocks.load();
+        
 
     }
 
