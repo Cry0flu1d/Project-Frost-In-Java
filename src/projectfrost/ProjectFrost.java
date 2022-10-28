@@ -18,9 +18,8 @@ public class ProjectFrost extends Mod{
         Log.info("Loading ProjectFrost...");
         PFUnits.load();
         PFItems.load();
-        PFBullets.load();
         PFBlocks.load();
-        PFEffects.load();
+        PFFx.load();
 
     }
 

@@ -10,6 +10,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
+import mindustry.type.weapons.*;
 
 import static projectfrost.ProjectFrost.name;
 
@@ -17,7 +18,7 @@ public class PFUnits {
     public static  UnitType sharder,subzero,cargoFlare;
     static{
         EntityMapping.nameMap.put(name("sharder"), EntityMapping.idMap[4]);
-        EntityMapping.nameMap.put(name("subzero"), EntityMapping.idMap[5]);
+        EntityMapping.nameMap.put(name("subzero"), EntityMapping.idMap[24]);
         EntityMapping.nameMap.put(name("cargoFlare"), EntityMapping.idMap[3]);
     }
 
@@ -109,35 +110,27 @@ public class PFUnits {
 
                 }};
             }});
-            weapons.add(new Weapon("subzero-parallax"){{
-                shootY = 3f;
-                inaccuracy = 30;
-                reload = 120f;
-              
-                recoil = 3f;
+            weapons.add(new RepairBeamWeapon("subzero-repair"){{
+                reload = 120f;              
                 x = 6f;
                 y = -2f;
                 layerOffset = -1;
                 mirror = false;
                 top = rotate = true;
-                shootSound = Sounds.shotgun;
                 shootY = 10f; 
-                shootCone = 0;
-                bullet = new ShrapnelBulletType(){{
-                    buildingDamageMultiplier = 0.01f;
-                    lifetime = 32f;
-                    pierce = true;
-                    pierceBuilding = false;
-                    pierceCap = 4;
-                    serrations = 6;
-                    fromColor = Color.valueOf("9EF4FFFF");
-                    toColor = Color.valueOf("6FE7F7FF");
-                    width = 12;
-                    length = 114;
-                    damage = 45;
-                    shootEffect = Fx.lightningShoot;
-                    statusDuration = 60;
-                    status = StatusEffects.freezing;
+                beamWidth = 0.4f;
+                aimDst = 0f;
+                shootCone = 10f;
+                repairSpeed = 2f / 2f;
+                fractionRepairSpeed = 0.02f;
+                targetUnits = false;
+                targetBuildings = true;
+                autoTarget = false;
+                controllable = true;
+                laserColor = Color.cyan;
+                healColor = Color.cyan;
+                bullet = new BulletType(){{
+                    maxRange = 25f;
                 }};
                 
             }});

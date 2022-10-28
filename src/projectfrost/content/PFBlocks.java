@@ -20,8 +20,7 @@ import mindustry.world.blocks.logic.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.blocks.units.UnitCargoLoader;
-import mindustry.world.blocks.units.UnitCargoUnloadPoint;
+import mindustry.world.blocks.units.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Env;
@@ -41,7 +40,7 @@ public class PFBlocks {
         //wall
         frostiteWall , largeFrostiteWall,
         //turret
-        autocannon,farlight,ionization,
+        autocannon,farlight,ionization,electron,shimmerspark,
         //factory
         waterCrystalizer,frostSynthesizer,
 
@@ -55,6 +54,7 @@ public class PFBlocks {
         differentialBattery,largeDifferentialBattery,
         //production
         icyDrill,
+        //TODO units
         //effect
         coreFrost,
         //logic
@@ -90,10 +90,10 @@ public class PFBlocks {
         //endregion walls
         //region turrets
         farlight = new PowerTurret("farlight"){{
-            requirements(Category.turret, with(Items.copper, 1200, Items.titanium, 800, Items.plastanium, 300, Items.silicon, 500, Items.surgeAlloy, 200));
+            requirements(Category.turret, with(Items.copper, 1100, Items.titanium, 700, Items.plastanium, 300, Items.silicon, 500, Items.surgeAlloy, 200));
             shootType = new LaserBulletType(){{
-                length = 400f;
-                damage = 500f;
+                length = 480f;
+                damage = 550f;
                 width = 42f;
 
                 lifetime = 60f;
@@ -108,7 +108,7 @@ public class PFBlocks {
                 lightColor = lightningColor = Pal.lancerLaser.cpy().a(0.4f);
                 colors = new Color[]{Pal.lancerLaser.cpy().a(0.4f), Pal.lancerLaser, Color.white};
 
-                chargeEffect = PFEffects.farlightShot;
+                chargeEffect = PFFx.farlightShot;
                 hitEffect = Fx.hitLancer;
                 collidesTeam = true;
 
@@ -118,11 +118,11 @@ public class PFBlocks {
                 buildingDamageMultiplier = 0.15f;
             }};
             size = 4;
-            reload = 460f;
+            reload = 380f;
             shootCone = 2f;
             rotateSpeed = 2.5f;
             targetAir = true;
-            range = 384f;
+            range = 420f;
             shootEffect = new MultiEffect(
                 Fx.lightningShoot,
                 Fx.shootBigSmoke2);
@@ -131,25 +131,25 @@ public class PFBlocks {
             health = 1880;
             shootSound = Sounds.laserbig;
             chargeSound = Sounds.lasercharge;
-            consumePower(800f / 60f);
+            consumePower(750f / 60f);
             coolant = consumeCoolant(0.8f);
             coolantMultiplier = 0.6f;
         }};
         ionization = new PowerTurret("ionization"){{
-            requirements(Category.turret, with(Items.copper, 80, Items.titanium, 40, Items.silicon, 100, Items.graphite, 50));
-            range = 225f;
+            requirements(Category.turret, with(Items.copper, 120, Items.titanium, 80, Items.silicon, 100, Items.graphite, 50));
+            range = 210f;
 
-            shoot.firstShotDelay = 20f;
+            shoot.firstShotDelay = 30f;
 
             recoil = 1.8f;
-            reload = 60f;
+            reload = 72f;
             shake = 1.4f;
             shootEffect = Fx.lancerLaserShoot;
             smokeEffect = Fx.none;
             heatColor = Color.red;
             size = 2;
             scaledHealth = 240;
-            consumePower(280f / 60f);
+            consumePower(420f / 60f);
             targetAir = true;
             moveWhileCharging = false;
             shootSound = Sounds.spark;
@@ -164,17 +164,17 @@ public class PFBlocks {
                 trailInterval = 2.5f;
                 trailParam = 2.2f;
                 speed = 4f;
-                damage = 64f;
-                lifetime = 90f;
+                damage = 45f;
+                lifetime = 95f;
                 width = height = 12f;
                 backColor = Color.white;
                 frontColor = Pal.lancerLaser;
                 shrinkX = shrinkY = 0f;
                 trailColor = Color.valueOf("BFD9FF");
-                trailLength = 12;
+                trailLength = 14;
                 trailWidth = 2.2f;
                 despawnEffect = Fx.none;
-                hitEffect = Fx.hitLancer;
+                hitEffect = new MultiEffect(Fx.hitLancer,PFFx.hitPlasmaSmall);
                 intervalBullet = new LightningBulletType(){{
                     damage = 12;
                     ammoMultiplier = 1f;
@@ -197,12 +197,116 @@ public class PFBlocks {
                 bulletInterval = 3f;
 
                 lightningColor = Pal.lancerLaser;
-                lightningDamage = 16;
-                lightning = 6;
-                lightningLength = 3;
-                lightningLengthRand = 6;
+                lightningDamage = 12;
+                lightning = 4;
+                lightningLength = 2;
+                lightningLengthRand = 4;
             }};
         coolant = consumeCoolant(0.2f);
+        }};
+        electron = new PowerTurret("electron"){{
+            requirements(Category.turret, with(Items.lead, 80, Items.titanium, 100, Items.silicon, 100, Items.graphite, 60));
+            range = 110f;
+            shootType = new BasicBulletType(6f,48f){{
+                hitSize = 8f;
+                lifetime = 24f;
+                pierce = true;
+                collidesAir = false;
+                shootEffect = PFFx.shootPlasmaFlame;
+                hitEffect = PFFx.hitPlasmaSmall;
+                despawnEffect = Fx.none;
+                //status = StatusEffects.burning;
+                //another status in progress
+                //status = PFStatusEffects.plasmaInferno;
+                //statusDuration = 60f * 4;
+                keepVelocity = false;
+                hittable = false; 
+            }};
+            recoil = 0f;
+            reload = 5f;
+            coolantMultiplier = 1.25f;
+            shootCone = 40f;
+            targetAir = false;
+            health = 680;
+            shootSound = Sounds.flame;
+            coolant = consumeCoolant(0.18f);
+            consumePower(480f / 60f);
+        }};
+        shimmerspark = new PowerTurret("shimmerspark"){{
+            requirements(Category.turret, with(Items.lead, 220, Items.titanium, 150, Items.graphite, 200, Items.silicon, 200, Items.phaseFabric, 100));
+            
+            shootType = new BasicBulletType(){{
+                shootEffect = new MultiEffect(Fx.shootTitan, new WaveEffect(){{
+                    colorTo = Pal.lancerLaser;
+                    sizeTo = 22f;
+                    lifetime = 10f;
+                    strokeFrom = 3f;
+                }});
+                smokeEffect = Fx.shootSmokeTitan;
+                hitColor = Pal.lancerLaser;
+
+                sprite = "missile-large";
+                trailEffect = Fx.missileTrail;
+                trailInterval = 2.8f;
+                trailParam = 4f;
+                pierceCap = 4;
+                fragOnHit = false;
+                speed = 6f;
+                damage = 130f;
+                lifetime = 72f;
+                width = height = 14f;
+                backColor = Pal.lancerLaser;
+                frontColor = Color.white;
+                shrinkX = shrinkY = 0f;
+                trailColor = Pal.lancerLaser;
+                trailLength = 10;
+                trailWidth = 2f;
+                despawnEffect = hitEffect = new ExplosionEffect(){{
+                    waveColor = Pal.lancerLaser;
+                    smokeColor = Color.gray;
+                    sparkColor = Color.valueOf("76a9dc");
+                    waveStroke = 5f;
+                    waveRad = 30f;
+                }};
+
+                intervalBullet = new BasicBulletType(3f, 28){{
+                    sprite = "missile";
+                    width = 6f;
+                    hitSize = 4.5f;
+                    height = 12f;
+                    pierce = true;
+                    pierceCap = 3;
+                    lifetime = 40f;
+                    hitColor = backColor = trailColor = Pal.lancerLaser;
+                    frontColor = Color.white;
+                    trailWidth = 1.8f;
+                    trailLength = 4;
+                    hitEffect = despawnEffect = new WaveEffect(){{
+                        colorFrom = colorTo = Pal.lancerLaser;
+                        sizeTo = 3f;
+                        strokeFrom = 2f;
+                        lifetime = 8f;
+                    }};
+                    homingPower = 0.25f;
+                }};
+
+                bulletInterval = 6f;
+                intervalRandomSpread = 25f;
+                intervalBullets = 3;
+                intervalAngle = 120f;
+                intervalSpread = 288f;
+
+            }};
+
+            reload = 120f;
+            range = 300f;
+            size = 3;
+            shootCone = 10f;
+            recoil = 2.2f;
+            scaledHealth = 180;
+            rotateSpeed = 2f;
+            coolant = consumeCoolant(0.3f);
+            consumePower(600f / 60f);
         }};
         //endregion turrets
         //region production
@@ -291,20 +395,20 @@ public class PFBlocks {
         }};
         //TODO bad name and extremely imba
         /*flareLoadingPad = new UnitCargoLoader("flare-loading-pad"){{
-            requirements(Category.distribution, with(Items.lead, 250, Items.silicon, 200, Items.graphite, 150, Items.plastanium, 80));
+            requirements(Category.distribution, with(Items.lead, 250, Items.silicon, 200, Items.graphite, 150, Items.plastanium, 100));
             size = 2;
             unitType = PFUnits.cargoFlare;
-            buildTime = 12f*60f;
+            buildTime = 24f*60f;
             polyStroke = 1.5f;
-            polyRadius = 5;
-            polySides = 4;
+            polyRadius = 4;
+            polySides = 6;
             consumePower(200f / 60f);
             consumeItem(Items.silicon, 60);
-            itemCapacity = 180;
+            itemCapacity = 120;
 
         }};
-        flareUnloadingPoint = new UnitCargoUnloadPoint("flare-pnloading-point"){{
-            requirements(Category.distribution, with(Items.silicon, 50, Items.graphite, 80));
+        flareUnloadingPoint = new UnitCargoUnloadPoint("flare-unloading-point"){{
+            requirements(Category.distribution, with(Items.silicon, 50, Items.graphite, 80,Items.titanium, 60));
             size = 1;
             itemCapacity = 60;
         }};*/
@@ -312,10 +416,10 @@ public class PFBlocks {
         //endregion distribution
         //region power
         cryoTransmitter = new PowerNode("cryo-transmitter"){{
-            requirements(Category.power, with(Items.titanium, 2, Items.silicon, 2, PFItems.frostite,1));
+            requirements(Category.power, with(Items.titanium, 3, Items.silicon, 4, PFItems.frostite,2));
             health = 100;
-            maxNodes = 6;
-            laserRange = 12f;
+            maxNodes = 7;
+            laserRange = 17.5f;
             laserColor1 = Color.valueOf("6FE7F7");
             laserColor2 = Color.valueOf("9EF4FF");
         }};
@@ -326,8 +430,9 @@ public class PFBlocks {
             itemDuration = 240f;
             consumeItem(PFItems.frostite,  2);
             consumeLiquid(Liquids.slag, 0.4f);
+            outputLiquid = new LiquidStack(Liquids.cryofluid, 1.5f/60f);
             hasItems = hasLiquids = true;
-            drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
+            drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion(), new DrawLiquidRegion());
             powerProduction = 16;
         }};
         
@@ -349,6 +454,8 @@ public class PFBlocks {
             health = 1000;
         }};
         //endregion power
+        //region units   
+        //endregion units
         //region production
         icyDrill = new Drill("icy-drill"){{
             requirements(Category.production, with(Items.graphite, 10, Items.metaglass, 6 ,PFItems.frostite, 12));
